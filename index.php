@@ -154,8 +154,8 @@ $year = date('Y'); ?>
     </section>
     <section id="kontak">
       <h2>Kontak</h2>
-      <p> Email: rehanfadillah1203@gmail.com </p>
-      <p> Alamat:Pisang Pride cuy </p>
+      <p> Email: ghanisensei1@@gmail.com </p>
+      <p> Alamat:Pasaman barat </p>
     </section>
   </main>
   <footer> <small> &copy; <?= $year ?> <?= htmlspecialchars($siteName) ?> </small> </footer>

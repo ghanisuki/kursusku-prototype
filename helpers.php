@@ -1,21 +1,29 @@
 <?php
+/**
+ * helpers.php
+ * Kumpulan function reusable untuk proyek KursusKu.
+ * Pertemuan 4 - Sub-CPMK3 (fungsi string, date/time, function/procedure)
+ *
+ * Catatan: file ini TIDAK boleh menghasilkan output sendiri ketika di-include.
+ */
 
-function rupiah($angka)
+function rupiah(int $amount): string
 {
-    return 'Rp ' . number_format($angka, 0, ',', '.');
+    return 'Rp ' . number_format($amount, 0, ',', '.');
 }
 
-function sisaKursi($quota, $registered)
+function statusKursus(int $quota, int $registered): string
+{
+    return $registered >= $quota ? 'Penuh' : 'Tersedia';
+}
+
+function sisaKursi(int $quota, int $registered): int
 {
     return max(0, $quota - $registered);
 }
 
-function statusKursus($quota, $registered)
+function formatTanggal(string $date): string
 {
-    return sisaKursi($quota, $registered) === 0 ? 'Penuh' : 'Tersedia';
-}
-
-function formatTanggal($tanggal)
-{
-    return date('d-m-Y', strtotime($tanggal));
+    $value = new DateTimeImmutable($date);
+    return $value->format('d-m-Y');
 }

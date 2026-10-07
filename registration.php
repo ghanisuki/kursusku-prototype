@@ -27,7 +27,7 @@
     </section>
 
     <section class="form-card">
-        <form action="process-registration.php" method="GET" class="registration-form">
+        <form action="process-registration.php" method="POST" class="registration-form">
 
             <!-- Hidden field: dikirim ke server tetapi tidak terlihat pengguna -->
             <input type="hidden" name="source" value="week-05">

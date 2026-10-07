@@ -16,37 +16,39 @@ $courses = [
     ['code' => 'UI-01',  'name' => 'UI Web Dasar',        'fee' => 225000, 'quota' => 35, 'registered' => 9,  'start_date' => '2026-10-03'],
 ];
 ?>
-<!doctype html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= htmlspecialchars($siteName) ?> - Beranda</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-<header class="site-header">
-    <div class="container nav-wrap">
-        <a class="brand" href="index.php"><?= htmlspecialchars($siteName) ?></a>
-        <nav aria-label="Navigasi utama">
-            <a href="index.php">Beranda</a>
-            <a href="index.php#katalog">Katalog</a>
-            <a href="fee-calculator.php">Estimasi Biaya</a>
-            <a href="registration.php">Daftar Kursus</a>
-        </nav>
-    </div>
-</header>
-
+<?php
+$pageTitle   = 'Beranda';
+$currentPage = 'index.php';
+require __DIR__ . '/includes/header.php';
+?>
 <main class="container">
     <section id="hero" class="hero">
+        <p class="eyebrow">Platform Kursus Teknologi</p>
         <h1><?= htmlspecialchars($tagline) ?></h1>
         <p>Temukan kursus teknologi yang relevan untuk meningkatkan keterampilan Anda.</p>
         <div class="hero-actions">
-            <a class="btn-primary" href="registration.php">Daftar Kursus</a>
+            <a class="btn-primary" href="register.php">Daftar Kursus</a>
             <a class="btn-outline" href="#katalog">Lihat Katalog Kursus</a>
             <a class="btn-outline" href="fee-calculator.php">Lihat Estimasi Biaya</a>
         </div>
     </section>
+
+    <?php
+    $totalCourses   = count($courses);
+    $availableCount = 0;
+    $seatsLeft      = 0;
+    foreach ($courses as $c) {
+        if (statusKursus($c['quota'], $c['registered']) === 'Tersedia') {
+            $availableCount++;
+        }
+        $seatsLeft += sisaKursi($c['quota'], $c['registered']);
+    }
+    ?>
+    <div class="stats" aria-label="Ringkasan katalog">
+        <div class="stat"><b><?= $totalCourses ?></b><span>Kursus tersedia di katalog</span></div>
+        <div class="stat"><b><?= $availableCount ?></b><span>Kursus masih menerima peserta</span></div>
+        <div class="stat"><b><?= $seatsLeft ?></b><span>Total sisa kursi</span></div>
+    </div>
 
     <section id="keunggulan">
         <h2>Mengapa Memilih KursusKu?</h2>
@@ -104,7 +106,7 @@ $courses = [
         <h2>Cara Mendaftar</h2>
         <ol class="steps">
             <li>Pilih kursus yang diminati.</li>
-            <li>Isi <a href="registration.php">form pendaftaran</a>.</li>
+            <li>Isi <a href="register.php">form pendaftaran</a>.</li>
             <li>Periksa kembali data.</li>
             <li>Kirim pendaftaran dan tunggu konfirmasi.</li>
         </ol>
@@ -134,8 +136,4 @@ $courses = [
     </section>
 </main>
 
-<footer class="site-footer">
-    <small>&copy; <?= $year ?> <?= htmlspecialchars($siteName) ?></small>
-</footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/footer.php'; ?>

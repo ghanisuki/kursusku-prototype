@@ -1,4 +1,4 @@
-# Langkah Pembuatan KursusKu (Pertemuan 2 - 5)
+# Langkah Pembuatan KursusKu (Pertemuan 2 - 6)
 
 Satu proyek yang sama dikembangkan setiap minggu: `kursusku-prototype`.
 
@@ -81,6 +81,71 @@ git add .
 git commit -m "Praktikum-05"
 git push origin main
 ```
+
+## Pertemuan 6 - Percabangan, Looping, Form Lanjutan
+
+Alur akhir: `index.php` -> `register.php` -> `process.php` -> ringkasan -> `history.php`. Tanpa database.
+
+### Langkah 1 - Siapkan folder
+Buat `evidence/week-06/` dan folder `includes/`. Jangan membuat proyek baru.
+File P5 (`registration.php`, `process-registration.php`) dibiarkan sebagai arsip evidence minggu 5; navigasi kini menuju `register.php`.
+
+### Langkah 2 - `data.php` (array sumber data)
+`$courses` (code, name, fee), `$interestOptions`, `$facilities`. Checkpoint: ubah satu nama kursus, refresh, cukup ubah di satu tempat.
+
+### Langkah 3 - Tambahkan helper di `helpers.php`
+Fungsi P4 tidak dihapus. Tambahkan satu per satu dan uji tiap fungsi:
+`e()`, `formatRupiah()`, `findCourse()` (foreach), `getDiscountPercent()` (if/elseif), `getLearningModeLabel()` (switch), `postString()` (?? + is_string).
+
+### Langkah 4 - `includes/header.php` dan `footer.php`
+Kepala halaman + navigasi dipakai bersama agar konsisten (Beranda, Estimasi Biaya, Daftar Kursus, History Dummy).
+
+### Langkah 5 - `register.php`
+- Select kursus dengan `foreach ($courses ...)`.
+- Radio `participant_type` (satu nama, `required` pada satu radio).
+- Checkbox `interests[]` dengan `foreach ($interestOptions ...)`.
+- Select metode belajar, select jumlah paket dengan `for ($i = 1; $i <= 3; $i++)`, textarea catatan.
+- Daftar fasilitas dengan `foreach`.
+
+### Langkah 6 - `process.php`
+1. Jika bukan POST: `header('Location: register.php'); exit;` (sebelum output HTML).
+2. Baca data (`??`, `trim`, `(int)` untuk paket), saring minat dengan `array_intersect`.
+3. Validasi -> array `$errors`; jika tidak kosong tampilkan error lalu `exit`.
+4. Hitung: `$grossTotal = fee x paket`; `$discountAmount = intdiv($grossTotal * persen, 100)`; `$finalTotal = $grossTotal - $discountAmount`.
+5. Tampilkan ringkasan (semua teks pengguna lewat `e()`).
+
+### Langkah 7 - `history.php` dan `loop-lab.php`
+History dummy dengan `foreach`; loop-lab berisi contoh `for`, `while`, `do-while`.
+
+### Langkah 8 - Integrasi
+Tombol "Daftar Kursus" di landing page menuju `register.php`; semua halaman tersambung lewat navigasi.
+
+### Langkah 9 - Uji dan evidence
+Jalankan 12 skenario di `evidence/week-06/test-matrix.txt` (isi Actual dan Status sendiri), ambil 6 screenshot (lihat `README-screenshot.txt`), isi `refleksi.txt` dan, jika memakai AI, `ai-usage-log.txt`.
+
+### Langkah 10 - Commit
+```
+git add .
+git commit -m "Praktikum-06"
+git push origin main
+```
+
+## Pembaruan Tampilan - Hitam, Putih + Warna Aksen yang Bisa Diganti Langsung
+- Warna aksen (tombol, status, fokus, garis) kini diganti **langsung dari navbar** lewat lima titik warna: hijau, biru, ungu, oranye, merah. Tidak perlu lagi mengedit blok `:root`.
+- Cara kerja (tanpa JavaScript, memakai konsep GET + cookie + PHP):
+  1. Klik titik warna -> halaman membuka `halaman.php?theme=blue` (GET).
+  2. `includes/theme.php` memvalidasi nilai dengan whitelist `$themes`, menyimpan cookie `kursusku_theme` selama 1 tahun, lalu redirect ke halaman bersih.
+  3. `includes/header.php` memasang `<html data-theme="blue">`; `style.css` mengubah variabel `--accent-*` sesuai blok `[data-theme="blue"]`.
+- Menambah warna baru: tambahkan satu baris di array `$themes` (`includes/theme.php`), satu blok `[data-theme="..."]` dan satu kelas `.swatch-...` di `style.css`.
+- `index.php` dan `fee-calculator.php` sekarang memakai `includes/header.php` dan `footer.php` seperti halaman Pertemuan 6 lainnya. `registration.php` dan `process-registration.php` (arsip Pertemuan 5) tetap memakai warna default.
+- Header, hero, dan footer tetap hitam; konten tetap putih.
+
+## Halaman Test Matrix (Navigasi "Test Matrix")
+- File: `test-matrix.php`, tautan ada di navbar semua halaman (`includes/header.php`).
+- Menampilkan 12 skenario Pertemuan 6 dengan kolom No, Skenario, Actual, Expected, Status (PASS/FAIL), dan ringkasan `12/12 Pass`.
+- Kolom Actual dihitung langsung dengan fungsi proyek (`findCourse`, `getDiscountPercent`, `formatRupiah`, `getLearningModeLabel`); test 5-7 memakai ekspresi yang sama seperti `process.php`; test 11 memeriksa adanya guard redirect di `process.php`; test 12 merender loop fasilitas dengan satu item tambahan.
+- Jika ada fungsi yang rusak, barisnya otomatis berubah menjadi FAIL.
+- Halaman ini pelengkap evidence: uji manual di browser dan screenshot tetap wajib (`evidence/week-06`).
 
 ## Kalimat yang harus bisa dijelaskan
 "Form mengirim pasangan key-value. Key berasal dari atribut `name`. Untuk alur pendaftaran saya memakai POST; PHP membaca data melalui `$_POST` dan output ditampilkan kembali setelah di-escape. CSS mengatur konsistensi dan responsive layout, sedangkan hosting memindahkan aplikasi dari lingkungan lokal ke server publik yang harus dikonfigurasi lebih aman."

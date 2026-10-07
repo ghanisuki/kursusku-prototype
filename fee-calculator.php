@@ -10,27 +10,13 @@ $subtotal = $fee * $participantCount;
 $discount = intdiv($subtotal * $discountPercent, 100);
 $total    = $subtotal - $discount + $adminFee;
 ?>
-<!doctype html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kalkulator Biaya - KursusKu</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-<header class="site-header">
-    <div class="container nav-wrap">
-        <a class="brand" href="index.php">KursusKu</a>
-        <nav aria-label="Navigasi utama">
-            <a href="index.php">Beranda</a>
-            <a href="index.php#katalog">Katalog</a>
-            <a href="fee-calculator.php">Estimasi Biaya</a>
-            <a href="registration.php">Daftar Kursus</a>
-        </nav>
-    </div>
-</header>
+<?php
+require __DIR__ . '/helpers.php';
 
+$pageTitle   = 'Kalkulator Biaya';
+$currentPage = 'fee-calculator.php';
+require __DIR__ . '/includes/header.php';
+?>
 <main class="container">
     <section class="page-intro">
         <p class="eyebrow">Pertemuan 3</p>
@@ -55,14 +41,10 @@ $total    = $subtotal - $discount + $adminFee;
             </table>
         </div>
         <p>
-            <a class="btn-link" href="registration.php">Daftar Sekarang</a>
+            <a class="btn-link" href="register.php">Daftar Sekarang</a>
             <a class="btn-outline" href="index.php">Kembali ke Beranda</a>
         </p>
     </section>
 </main>
 
-<footer class="site-footer">
-    <small>&copy; <?= date('Y') ?> KursusKu</small>
-</footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/footer.php'; ?>
